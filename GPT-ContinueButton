@@ -1,0 +1,70 @@
+// ==UserScript==
+// @name         GPT-ContinueButton
+// @version      0.1
+// @namespace    https://github.com/rocshawn/GPT-ContinueButton.git
+// @description  Insert a continue button into the page
+// @author       rocshawn
+// @match        https://chat.openai.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    const observer = new MutationObserver((mutationsList, observer) => {
+                const targetElement = document.querySelector(".flex.flex-col.w-full.py-2.flex-grow.md\\:py-3.md\\:pl-4.relative.border.border-black\\/10.bg-white.dark\\:border-gray-900\\/50");
+
+                if(targetElement) {
+                    observer.disconnect();
+
+                    // Create the button element
+                    const button = document.createElement("button");
+
+                    // Set the text content
+                    button.textContent = "继续";
+
+                    // Set the ID
+                    button.id = "request-code-btn";
+
+                    // Set the styles
+                    button.style.padding = "2px";
+                    button.style.border = "none";
+                    button.style.borderRadius = "20px";
+                    button.style.color = "#fff";
+                    button.style.backgroundColor = "#6e6e80";
+                    button.style.fontSize = "10px";
+                    button.style.fontWeight = "150";
+                    button.style.marginBottom = "10px";
+                    button.style.width = "80px";
+
+                    // Add event listener
+                    button.addEventListener("click", function() {
+                        const textarea = document.querySelector("textarea[tabindex='0']");
+                        const inputValue = textarea.value.trim();
+
+                        if (inputValue === "") {
+                            textarea.value = "Continue";
+                        }
+
+                        const clickElement = document.querySelector(".absolute.p-1.rounded-md.text-gray-500.bottom-1.5.md\\:bottom-2.5.hover\\:bg-gray-100.enabled\\:dark\\:hover\\:text-gray-400.dark\\:hover\\:bg-gray-900.disabled\\:hover\\:bg-transparent.dark\\:disabled\\:hover\\:bg-transparent.right-1.md\\:right-2.disabled\\:opacity-40");
+                        clickElement.click();
+
+                        const textarea2 = document.querySelector(".flex.flex-col.items-end.px-2.pb-2 textarea");
+                        textarea2.value = inputValue;
+
+                        const option = document.createElement("option");
+                        option.value = inputValue;
+                        const selectElement = document.querySelector(".form-control.py-1");
+                        selectElement.appendChild(option);
+
+                        textarea.value = "";
+                    });
+
+                    // Insert the button before the target element
+                    targetElement.parentNode.insertBefore(button, targetElement);
+                }
+    });
+
+    // Start observing the document with the configured parameters
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
