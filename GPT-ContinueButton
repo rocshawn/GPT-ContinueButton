@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         GPT-ContinueButton
-// @version      0.1
+// @name         GPT Continue Button
+// @version      0.2
 // @namespace    https://github.com/rocshawn/GPT-ContinueButton.git
 // @description  Insert a continue button into the page
 // @author       rocshawn
@@ -14,9 +14,7 @@
     const observer = new MutationObserver((mutationsList, observer) => {
                 const targetElement = document.querySelector(".flex.flex-col.w-full.py-2.flex-grow.md\\:py-3.md\\:pl-4.relative.border.border-black\\/10.bg-white.dark\\:border-gray-900\\/50");
 
-                if(targetElement) {
-                    observer.disconnect();
-
+                if(targetElement && !document.getElementById("request-code-btn")) {
                     // Create the button element
                     const button = document.createElement("button");
 
